@@ -5,6 +5,7 @@ import * as path from "path";
 import {LambdaIntegration} from "aws-cdk-lib/aws-apigateway";
 import {ITable} from "aws-cdk-lib/aws-dynamodb";
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
+import {Effect, PolicyStatement} from "aws-cdk-lib/aws-iam";
 
 interface LambdaStackProps extends StackProps {
   spacesTable: ITable;
@@ -47,6 +48,18 @@ export class LambdaStack extends Stack {
         TABLE_NAME: props.spacesTable.tableName
       }
     });
+
+    spacesLambda.addToRolePolicy(new PolicyStatement({
+      effect: Effect.ALLOW,
+      resources: [props.spacesTable.tableArn],
+      actions: [
+        'dynamodb:PutItem',
+        'dynamodb:GetItem',
+        'dynamodb:Scan',
+        'dynamodb:UpdateItem',
+        'dynamodb:DeleteItem',
+      ]
+    }));
 
     this.spacesLambdaIntegration = new LambdaIntegration(spacesLambda);
   }
