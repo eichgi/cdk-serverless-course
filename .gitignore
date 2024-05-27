@@ -9,3 +9,4 @@ cdk.out
 .idea
 
 spaces.http
+http-client.env.json
