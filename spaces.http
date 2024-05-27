@@ -1,0 +1,30 @@
+### Spaces GET Request
+GET {{url}}/spaces
+Authorization: {{token}}
+
+### Spaces POST Request
+POST {{url}}/spaces
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "location": "Kankun",
+  "name": "Caribbean Paradise"
+}
+
+### Spaces GET Request By ID
+GET {{url}}/spaces?id=f34577c9-c142-4245-a76e-960ce7653757
+Authorization: {{token}}
+
+### Spaces DELETE Request By ID
+DELETE {{url}}/spaces?id=c32a8649-dae1-4042-b1cf-e13b1a828476
+Authorization: {{token}}
+
+### Spaces PUT Request
+PUT {{url}}/spaces?id=5207b1eb-3073-4600-89eb-89c31b4c170e
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "name": "Now BEST location!"
+}
