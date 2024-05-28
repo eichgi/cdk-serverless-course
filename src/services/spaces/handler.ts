@@ -5,29 +5,28 @@ import {getSpaces} from "./GetSpaces";
 import {updateSpaces} from "./UpdateSpaces";
 import {deleteSpaces} from "./DeleteSpaces";
 import {JsonError, MissingFieldError} from "../shared/Validator";
+import {addCorsHeader} from "../shared/Utils";
 
 const dynamoClient = new DynamoDBClient({});
 
 async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
 
-  let message: string;
+  let response: APIGatewayProxyResult;
 
   try {
     switch (event.httpMethod) {
       case 'GET':
-        const getResponse = getSpaces(event, dynamoClient);
-        return getResponse;
+        response = await getSpaces(event, dynamoClient);
+        break;
       case 'POST':
-        const postResponse = await postSpaces(event, dynamoClient);
-        return postResponse;
+        response = await postSpaces(event, dynamoClient);
+        break;
       case 'PUT':
-        const putResponse = await updateSpaces(event, dynamoClient);
-        console.log(putResponse);
-        return putResponse;
+        response = await updateSpaces(event, dynamoClient);
+        break;
       case 'DELETE':
-        const deleteResponse = await deleteSpaces(event, dynamoClient);
-        console.log(deleteResponse);
-        return deleteResponse;
+        response = await deleteSpaces(event, dynamoClient);
+        break;
       default:
         break;
     }
@@ -48,17 +47,14 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
       }
     }
 
+
     return {
       statusCode: 500,
       body: JSON.stringify(error.message),
     }
   }
 
-  const response: APIGatewayProxyResult = {
-    statusCode: 200,
-    body: JSON.stringify(message),
-  }
-  console.log(event);
+  addCorsHeader(response);
   return response;
 }
 
